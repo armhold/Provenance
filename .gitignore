@@ -1,0 +1,21 @@
+# maven build artifacts
+target/**
+
+# Intelij IDEA work dir
+out/**
+
+# Intellij IDEA project dir
+.idea/**
+
+# Intellij IDEA project file
+*.iml
+
+# Eclipse project file
+.project
+
+# Eclipse class path
+.classpath
+
+# Eclipse project settings
+.settings/**
+
