@@ -1,3 +1,6 @@
+Provenance
+==========
+
 Have you just inherited an Ant project? Maybe you have a "lib" dir full of random
 jar files? Worse, some thoughtless developer has neglected to put version numbers on the jars?
 
@@ -10,5 +13,5 @@ in the dependencies section of your pom.xml
 
 Run like:
 
-  $ java Provenance lib_dir
+    $ java Provenance lib_dir
 
