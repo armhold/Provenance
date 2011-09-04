@@ -121,7 +121,7 @@ public class Provenance
 
             if (xml == null)
             {
-                xml = "<artifact>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName() + "</artifactId>\n   <version>unknown</version>\n</artifact>";
+                xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName() + "</artifactId>\n   <version>unknown</version>\n</dependency>";
             }
 
             StringBuilder b = new StringBuilder();
