@@ -121,7 +121,11 @@ public class Provenance
 
             if (xml == null)
             {
-                xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName() + "</artifactId>\n   <version>unknown</version>\n</dependency>";
+                //xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName() + "</artifactId>\n   <version>unknown</version>\n</dependency>";
+                xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName().split("\\.")[0] + "</artifactId>\n   <version>1.0</version>\n   <scope>system</scope>\n " +
+                		"  <systemPath>${project.basedir}/lib/"+file.getName()+"</systemPath>\n</dependency>";
+
+                
             }
 
             StringBuilder b = new StringBuilder();

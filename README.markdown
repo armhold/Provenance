@@ -12,8 +12,15 @@ hash to search a REST API for the Maven coordinates of the given artifact.
 For each identified jar file, it will print out a snippet of XML that you can include
 in the dependencies section of your pom.xml
 
+Build:
+------
+	in the directory where is pom.xml run:
+		mvn package
+	
+	then copy the final jar whenever you want:  
+		cp target/provenance-1.1-jar-with-dependencies.jar  somewhere/provenance.jar
+
 Run like:
 ---------
-
-    $ java Provenance lib_dir
+    	$ java -jar Provenance.jar lib_dir 	
 
