@@ -22,5 +22,12 @@ Build:
 
 Run like:
 ---------
-    	$ java -jar Provenance.jar lib_dir 	
+    	$ java -jar provenance.jar lib_dir 	
 
+If you want to write results to a file instead of console
+
+    	$ java -jar provenance.jar lib_dir > deps.xml
+    	
+If behind a proxy be sure to provide information for https proxying
+
+    	$ java -Dhttps.proxyHost=proxyhostURL -Dhttps.proxyPort=proxyPortNumber -Dhttps.proxyUser=someUserName -Dhttps.proxyPassword=somePassword -jar provenance.jar lib_dir > deps.xml
