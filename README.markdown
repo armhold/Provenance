@@ -12,6 +12,8 @@ hash to search a REST API for the Maven coordinates of the given artifact.
 For each identified jar file, it will print out a snippet of XML that you can include
 in the dependencies section of your pom.xml
 
+Artifacts that are not found are printed separately and referenced as local libraries within the pom.
+
 Build:
 ------
 In the directory where the pom.xml is, run:
@@ -25,12 +27,12 @@ Then copy the final jar wherever you want:
 Run like:
 ---------
 
-    $ java -jar provenance.jar lib_dir 	
+    $ java -jar provenance.jar lib_dir 	add_comments
 
 If you want to write results to a file instead of the console:
 
-    $ java -jar provenance.jar lib_dir > deps.xml
+    $ java -jar provenance.jar lib_dir add_comments > deps.xml
     	
 If behind a proxy be sure to provide information for https proxying:
 
-    $ java -Dhttps.proxyHost=proxyhostURL -Dhttps.proxyPort=proxyPortNumber -Dhttps.proxyUser=someUserName -Dhttps.proxyPassword=somePassword -jar provenance.jar lib_dir > deps.xml
+    $ java -Dhttps.proxyHost=proxyhostURL -Dhttps.proxyPort=proxyPortNumber -Dhttps.proxyUser=someUserName -Dhttps.proxyPassword=somePassword -jar provenance.jar lib_dir add_comments > deps.xml
