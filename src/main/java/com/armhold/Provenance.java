@@ -17,21 +17,22 @@ import java.util.*;
  *
  * Run like:
  *
- *   java Provenance lib_dir
+ *   java Provenance lib_dir add_comments
  *
- * Will print out Maven dependency info to stdout; you can then use this to build your pom.xml.
+ * Will print out Maven dependency info to stdout ; you can then use this to build your pom.xml.
  *
  */
 public class Provenance
 {
     public static final String REST_BASE_URL = "https://repository.sonatype.org/service/local/lucene/search?sha1=";
+    private static boolean ADD_COMMENTS = true;
     private MessageDigest md;
 
     public Provenance()
     {
         try
         {
-          md = MessageDigest.getInstance("SHA-1");
+            md = MessageDigest.getInstance("SHA-1");
         }
         catch (Exception e)
         {
@@ -113,29 +114,39 @@ public class Provenance
 
     public void importJarFiles(String dir)
     {
+        StringBuilder unfoundSB = new StringBuilder();
         for (File file : getJarFiles(new File(dir)))
         {
             byte[] data = readFile(file);
             String sha = computeSHA(data);
             String xml = getXMLDependencyStanza(sha);
+            StringBuilder b = new StringBuilder();
+            StringBuilder comment = new StringBuilder();
 
-            if (xml == null)
-            {
-                //xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName() + "</artifactId>\n   <version>unknown</version>\n</dependency>";
-                xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName().split("\\.")[0] + "</artifactId>\n   <version>1.0</version>\n   <scope>system</scope>\n " +
-                		"  <systemPath>${project.basedir}/lib/"+file.getName()+"</systemPath>\n</dependency>";
-
-                
+            if(ADD_COMMENTS){
+                comment.append("<!-- ").append(file.getAbsoluteFile()).append(" -->\n");
+                comment.append("<!-- SHA1: ").append(sha).append(" -->\n");
             }
 
-            StringBuilder b = new StringBuilder();
-            b.append("<!-- ").append(file.getAbsoluteFile()).append(" -->\n");
-            b.append("<!-- SHA1: ").append(sha).append(" -->\n");
-            b.append(xml);
-            b.append("\n");
+            if (xml == null){
+                //xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName() + "</artifactId>\n   <version>unknown</version>\n</dependency>";
+                xml = "<dependency>\n   <groupId>unknown</groupId>\n   <artifactId>" + file.getName().split("\\.")[0] + "</artifactId>\n   <version>1.0</version>\n   <scope>system</scope>\n " +
+                        "  <systemPath>${project.basedir}/lib/"+file.getName()+"</systemPath>\n</dependency>\n";
 
-            System.out.println(b.toString());
+                unfoundSB.append(comment);
+                unfoundSB.append(xml);
+                unfoundSB.append("\n");
+            }
+            else{
+                //get file comment
+                b.append(comment);
+                b.append(xml);
+                System.out.println(b.toString());
+            }
         }
+        //print un found dependencies separately
+        System.out.println("\n\n<!--Unfound dependencies-->");
+        System.out.println(unfoundSB.toString());
     }
 
     /**
@@ -221,13 +232,16 @@ public class Provenance
      * *
      * $ mvn compile exec:java -Dexec.mainClass="com.armhold.Provenance" -Dexec.args="lib_dir"
      */
-    public static void main(String[] args) throws Exception
-    {
-        if (args.length != 1)
-        {
-            System.err.println("Usage: java com.armhold.Provenance lib_dir (where lib_dir contains your *.jar files)");
+    public static void main(String[] args) throws Exception{
+
+        if (args.length < 1 || args.length > 2){
+            System.err.println("Usage: java com.armhold.Provenance lib_dir add_comments");
+            System.err.println("\tlib_dir\t\t\t directory containing your *.jar files");
+            System.err.println("\tadd_comments\t optional flag (true or false) to avoid printing comments in pom, default is true");
             System.exit(1);
         }
+
+        if(args.length == 2 && args[1].equalsIgnoreCase("false"))  ADD_COMMENTS = false;
 
         Provenance provenance = new Provenance();
         provenance.importJarFiles(args[0]);
